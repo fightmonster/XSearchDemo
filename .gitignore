@@ -1,0 +1,28 @@
+# Android generated files
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# App build outputs
+app/build/
+app/release/
+
+# Signing files — keep keystore OUT of git
+*.jks
+*.keystore
+
+# Test dump files and audio test files at root
+*.xml
+*.mp3
+*.aac
+*.txt
+click_apk_logcat.txt
+
+# Kotlin cache
+.kotlin/
