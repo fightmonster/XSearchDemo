@@ -17,12 +17,13 @@ app/release/
 *.jks
 *.keystore
 
-# Test dump files and audio test files at root
-*.xml
-*.mp3
-*.aac
-*.txt
-click_apk_logcat.txt
-
 # Kotlin cache
 .kotlin/
+
+# Root-level test dump files (not part of source)
+/window_dump*.xml
+/click_apk_logcat.txt
+/test_music.mp3
+/horse.mp3
+/horse.aac
+/hello_song.aac
