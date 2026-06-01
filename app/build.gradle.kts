@@ -19,18 +19,14 @@ android {
     // Local debug builds do NOT require these to be set.
     signingConfigs {
         create("release") {
-            val keystoreB64 = System.getenv("RELEASE_KEYSTORE_BASE64")
-            if (!keystoreB64.isNullOrBlank()) {
-                // Use java.util.Base64 — android.util.Base64 is not available in Gradle build scripts
-                val decoded = java.util.Base64.getDecoder().decode(keystoreB64)
-                val keystoreFile = rootProject.layout.buildDirectory.file("release.jks").get().asFile
-                keystoreFile.parentFile.mkdirs()
-                keystoreFile.writeBytes(decoded)
-                storeFile = keystoreFile
+            // Keystore path is provided by the CI workflow after decoding from base64
+            val keystorePath = System.getenv("RELEASE_KEYSTORE_PATH")
+            if (!keystorePath.isNullOrBlank()) {
+                storeFile    = File(keystorePath)
+                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias      = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword   = System.getenv("RELEASE_KEY_PASSWORD")
             }
-            storePassword = System.getenv("RELEASE_STORE_PASSWORD")
-            keyAlias     = System.getenv("RELEASE_KEY_ALIAS")
-            keyPassword  = System.getenv("RELEASE_KEY_PASSWORD")
         }
     }
 

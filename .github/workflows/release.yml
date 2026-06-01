@@ -25,12 +25,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Decode keystore from secret
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > /tmp/release.jks
+          echo "RELEASE_KEYSTORE_PATH=/tmp/release.jks" >> $GITHUB_ENV
+
       - name: Build Release APK
         env:
-          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
-          RELEASE_KEY_ALIAS:       ${{ secrets.RELEASE_KEY_ALIAS }}
-          RELEASE_KEY_PASSWORD:    ${{ secrets.RELEASE_KEY_PASSWORD }}
-          RELEASE_STORE_PASSWORD:  ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEYSTORE_PATH: /tmp/release.jks
+          RELEASE_KEY_ALIAS:      ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD:   ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
         run: ./gradlew assembleRelease --no-daemon
 
       - name: Get version name from tag
