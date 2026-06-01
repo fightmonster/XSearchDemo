@@ -21,12 +21,11 @@ android {
         create("release") {
             val keystoreB64 = System.getenv("RELEASE_KEYSTORE_BASE64")
             if (!keystoreB64.isNullOrBlank()) {
-                // Decode base64 keystore written to a temp file in CI
-                val keystoreFile = File(rootProject.buildDir, "release.jks")
+                // Use java.util.Base64 — android.util.Base64 is not available in Gradle build scripts
+                val decoded = java.util.Base64.getDecoder().decode(keystoreB64)
+                val keystoreFile = rootProject.layout.buildDirectory.file("release.jks").get().asFile
                 keystoreFile.parentFile.mkdirs()
-                keystoreFile.writeBytes(
-                    android.util.Base64.decode(keystoreB64, android.util.Base64.DEFAULT)
-                )
+                keystoreFile.writeBytes(decoded)
                 storeFile = keystoreFile
             }
             storePassword = System.getenv("RELEASE_STORE_PASSWORD")
